@@ -10,7 +10,6 @@ class Taquin:
     def __init__(self):
         self.board_numbers = {}
         self.n = 3  # Board's height and width
-        self.depth = 0
         coordinates_list = [(i, j) for i in range(self.n) for j in range(self.n)]
         random.shuffle(coordinates_list)
 
@@ -49,7 +48,6 @@ class Taquin:
 
     def go_left(self):
         new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
         new_empty_slot = (new_taquin.empty_slot[0] + 1, new_taquin.empty_slot[1])
         new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
         new_taquin.board_numbers.pop(new_empty_slot)
@@ -61,7 +59,6 @@ class Taquin:
 
     def go_right(self):
         new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
         new_empty_slot = (new_taquin.empty_slot[0] - 1, new_taquin.empty_slot[1])
         new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
         new_taquin.board_numbers.pop(new_empty_slot)
@@ -73,7 +70,6 @@ class Taquin:
 
     def go_up(self):
         new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
         new_empty_slot = (new_taquin.empty_slot[0], new_taquin.empty_slot[1] + 1)
         new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
         new_taquin.board_numbers.pop(new_empty_slot)
@@ -85,7 +81,6 @@ class Taquin:
 
     def go_down(self):
         new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
         new_empty_slot = (new_taquin.empty_slot[0], new_taquin.empty_slot[1] - 1)
         new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
         new_taquin.board_numbers.pop(new_empty_slot)

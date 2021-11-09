@@ -1,7 +1,7 @@
 from taquin import Taquin
 
-node = Taquin()
-taq = node
+taq = Taquin()
+node = taq
 opened_nodes = []
 closed_nodes = set()
 j = 0
