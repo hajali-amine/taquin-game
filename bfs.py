@@ -1,34 +1,36 @@
 from taquin import Taquin
 
 taq = Taquin()
-opened_nodes = [taq]
+opened_nodes = []
 closed_nodes = set()
-i = 0
-j = 0
-while not opened_nodes[i].final_state():
-    if str(opened_nodes[i]) not in closed_nodes:
-        print(opened_nodes[i])
-        j = j + 1
 
-        if not opened_nodes[i].cant_go_down():
-            down_node = opened_nodes[i].go_down()
+while not taq.final_state():
+    if taq not in closed_nodes:
+        print(taq)
+
+        if taq.can_go_down():
+            down_node = taq.go_down()
             opened_nodes.append(down_node)
 
-        if not opened_nodes[i].cant_go_right():
-            right_node = opened_nodes[i].go_right()
+        if taq.can_go_right():
+            right_node = taq.go_right()
             opened_nodes.append(right_node)
 
-        if not opened_nodes[i].cant_go_up():
-            up_node = opened_nodes[i].go_up()
+        if taq.can_go_up():
+            up_node = taq.go_up()
             opened_nodes.append(up_node)
 
-        if not opened_nodes[i].cant_go_left():
-            left_node = opened_nodes[i].go_left()
+        if taq.can_go_left():
+            left_node = taq.go_left()
             opened_nodes.append(left_node)
 
-        closed_nodes.add(str(opened_nodes[i]))
+        closed_nodes.add(taq)
 
-    i = i + 1
+    if len(opened_nodes) != 0:
+        taq = opened_nodes.pop(0)
+    else:
+        print("no result")
+        break
 
-print(j)
-print(opened_nodes[i])
+print(len(closed_nodes))
+print(taq)
