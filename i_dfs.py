@@ -1,47 +1,43 @@
 from taquin import Taquin
-from copy import copy, deepcopy
 
 
-node = Taquin()
-taq = deepcopy(node)
-opened_nodes = []
-closed_nodes = set()
-limit = 0
-j = 0
-while not taq.final_state():
-    if taq not in closed_nodes:
-        print(taq)
-        j = j + 1
+def limited_dfs(taquin, limit):
+    taq = taquin
+    opened_nodes = []
+    closed_nodes = set()
 
-        if not taq.can_go_down() and taq.depth < limit:
-            down_node = taq.go_down()
-            opened_nodes.insert(0, down_node)
+    while not taq.final_state():
+        if (taq not in closed_nodes) and (taq.depth <= limit):
+            print(taq)
 
-        if not taq.can_go_right() and taq.depth < limit:
-            right_node = taq.go_right()
-            opened_nodes.insert(0, right_node)
+            if taq.can_go_down():
+                down_node = taq.go_down()
+                opened_nodes.append(down_node)
 
-        if not taq.can_go_up() and taq.depth < limit:
-            up_node = taq.go_up()
-            opened_nodes.insert(0, up_node)
+            if taq.can_go_right():
+                right_node = taq.go_right()
+                opened_nodes.append(right_node)
 
-        if not taq.can_go_left() and taq.depth < limit:
-            left_node = taq.go_left()
-            opened_nodes.insert(0, left_node)
+            if taq.can_go_up():
+                up_node = taq.go_up()
+                opened_nodes.append(up_node)
 
-        closed_nodes.add(taq)
+            if taq.can_go_left():
+                left_node = taq.go_left()
+                opened_nodes.append(left_node)
+
+            closed_nodes.add(taq)
+
         if len(opened_nodes) != 0:
-            taq = opened_nodes.pop(0)
+            taq = opened_nodes.pop()
         else:
-            limit = limit + 1
-            closed_nodes.clear()
-            taq = deepcopy(node)
-
-    else:
-        taq = opened_nodes.pop(0)
-        closed_nodes.clear()
-        taq = deepcopy(node)
+            print("no result")
+            return False
+    return True
 
 
-print(j)
-print(taq)
+taq = Taquin()
+limit = 0
+while not limited_dfs(taq, limit):
+    print("------------------------------------- {} -------------------------------------".format(limit))
+    limit = limit + 1
