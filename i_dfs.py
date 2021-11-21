@@ -33,11 +33,13 @@ def limited_dfs(taquin, limit):
         else:
             print("no result")
             return False
+    print(taq)
+    print("limit = ", limit)
     return True
 
 
 taq = Taquin()
 limit = 0
-while not limited_dfs(taq, limit):
+while not limited_dfs(taq, limit) and limit < 200000:
     print("------------------------------------- {} -------------------------------------".format(limit))
     limit = limit + 1
