@@ -1,16 +1,14 @@
 import random
 from copy import copy, deepcopy
 
-from numpy import equal
-
 
 class Taquin:
 
-    # Instantiating the Taquin with random values
     def __init__(self):
-        self.board_numbers = {}
         self.n = 3  # Board's height and width
         self.depth = 0
+        # Instantiating the Taquin with random values
+        self.board_numbers = {}
         coordinates_list = [(i, j) for i in range(self.n) for j in range(self.n)]
         random.shuffle(coordinates_list)
 
@@ -50,53 +48,53 @@ class Taquin:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def init_state(self):
+        print("Use '*' for the empty slot")
+
+        for j in range(self.n):
+            print("Insert the ", self.n, "digits of line ", j + 1, ":")
+            str_values = input().split(" ")
+            for i in range(self.n):
+                if str_values[i] == "*":
+                    self.empty_slot = (i, j)
+                    self.board_numbers[(i, j)] = 0
+                else:
+                    self.board_numbers[(i, j)] = int(str_values[i]) % 9
+
+        if len(self.board_numbers.values()) != len(set(self.board_numbers.values())):
+            self.init_state()
+
     def final_state(self):
         return hash(self) == 876543210
 
-    def can_go_left(self):
+    def move_piece(self, new_empty_slot):
+        new_taquin = deepcopy(self)
+        new_taquin.depth = new_taquin.depth + 1
+        new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
+        new_taquin.board_numbers[new_empty_slot] = 0
+        new_taquin.empty_slot = new_empty_slot
+        return new_taquin
+
+    def can_move_left(self):
         return self.empty_slot[0] < self.n - 1
 
-    def go_left(self):
-        new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
-        new_empty_slot = (new_taquin.empty_slot[0] + 1, new_taquin.empty_slot[1])
-        new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
-        new_taquin.board_numbers[new_empty_slot] = 0
-        new_taquin.empty_slot = new_empty_slot
-        return new_taquin
+    def move_left(self):
+        return self.move_piece((self.empty_slot[0] + 1, self.empty_slot[1]))
 
-    def can_go_right(self):
+    def can_move_right(self):
         return self.empty_slot[0] > 0
 
-    def go_right(self):
-        new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
-        new_empty_slot = (new_taquin.empty_slot[0] - 1, new_taquin.empty_slot[1])
-        new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
-        new_taquin.board_numbers[new_empty_slot] = 0
-        new_taquin.empty_slot = new_empty_slot
-        return new_taquin
+    def move_right(self):
+        return self.move_piece((self.empty_slot[0] - 1, self.empty_slot[1]))
 
-    def can_go_up(self):
+    def can_move_up(self):
         return self.empty_slot[1] < self.n - 1
 
-    def go_up(self):
-        new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
-        new_empty_slot = (new_taquin.empty_slot[0], new_taquin.empty_slot[1] + 1)
-        new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
-        new_taquin.board_numbers[new_empty_slot] = 0
-        new_taquin.empty_slot = new_empty_slot
-        return new_taquin
+    def move_up(self):
+        return self.move_piece((self.empty_slot[0], self.empty_slot[1] + 1))
 
-    def can_go_down(self):
+    def can_move_down(self):
         return self.empty_slot[1] > 0
 
-    def go_down(self):
-        new_taquin = deepcopy(self)
-        new_taquin.depth = new_taquin.depth + 1
-        new_empty_slot = (new_taquin.empty_slot[0], new_taquin.empty_slot[1] - 1)
-        new_taquin.board_numbers[new_taquin.empty_slot] = new_taquin.board_numbers[new_empty_slot]
-        new_taquin.board_numbers[new_empty_slot] = 0
-        new_taquin.empty_slot = new_empty_slot
-        return new_taquin
+    def move_down(self):
+        return self.move_piece((self.empty_slot[0], self.empty_slot[1] - 1))
