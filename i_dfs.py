@@ -34,18 +34,19 @@ def limited_dfs(taquin, limit):
     return True, len(closed_nodes)
 
 
-taq = Taquin()
-taq.init_state()
-limit = 0
-visited_nodes = 0
-last_visited_nodes = 0
-dfs_result = limited_dfs(taq, limit)
-
-while not dfs_result[0] and last_visited_nodes != dfs_result[1]:
-    print("------------------------------------- {} -------------------------------------".format(limit))
-    visited_nodes = visited_nodes + dfs_result[1]
-    limit = limit + 1
-    last_visited_nodes = dfs_result[1]
+if __name__ == '__main__':
+    taq = Taquin()
+    taq.init_state()
+    limit = 0
+    visited_nodes = 0
+    last_visited_nodes = 0
     dfs_result = limited_dfs(taq, limit)
 
-print("visited nodes = ", visited_nodes)
+    while not dfs_result[0] and last_visited_nodes != dfs_result[1]:
+        print("------------------------------------- {} -------------------------------------".format(limit))
+        visited_nodes = visited_nodes + dfs_result[1]
+        limit = limit + 1
+        last_visited_nodes = dfs_result[1]
+        dfs_result = limited_dfs(taq, limit)
+
+    print("visited nodes = ", visited_nodes)
