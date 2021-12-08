@@ -2,6 +2,24 @@ from taquin import Taquin
 
 
 class AStarHeuristics:
+    opened_nodes = [[]]
+
+    @staticmethod
+    def add_to_opened_nodes(taq, f):
+        if len(AStarHeuristics.opened_nodes) <= f:
+            AStarHeuristics.opened_nodes = [AStarHeuristics.opened_nodes[i] if i < len(AStarHeuristics.opened_nodes) else [] for i in range(f + 1)]
+        AStarHeuristics.opened_nodes[f].append(taq)
+
+    @staticmethod
+    def get_from_opened_nodes():
+        i = 0
+        while i < len(AStarHeuristics.opened_nodes) and not AStarHeuristics.opened_nodes[i]:
+            i = i + 1
+        if i == len(AStarHeuristics.opened_nodes):
+            return None
+        else:
+            return AStarHeuristics.opened_nodes[i].pop(0)
+
     @staticmethod
     def chosen_h(choice, taq):
         if choice == 1:
@@ -40,41 +58,40 @@ class AStarHeuristics:
         return result
 
 
-t = Taquin()
-t.init_state()
-choice = int(input("Choose 1 for h1.\nChoose 2 for h2.\n"))
-taq = t, AStarHeuristics.chosen_h(choice, t)
-opened_nodes = []
-closed_nodes = set()
+if __name__ == '__main__':
+    taq = Taquin()
+    taq.init_state()
+    choice = int(input("Choose 1 for h1.\nChoose 2 for h2.\n"))
+    closed_nodes = set()
 
-while not taq[0].final_state():
-    if taq[0] not in closed_nodes:
-        print(taq[0])
+    while not taq.final_state():
+        if taq not in closed_nodes:
+            print(taq)
 
-        if taq[0].can_move_down():
-            down = taq[0].move_down()
-            opened_nodes.append((down, down.depth + AStarHeuristics.chosen_h(choice, down)))
+            if taq.can_move_down():
+                down = taq.move_down()
+                AStarHeuristics.add_to_opened_nodes(down, down.depth + AStarHeuristics.chosen_h(choice, down))
 
-        if taq[0].can_move_right():
-            right = taq[0].move_right()
-            opened_nodes.append((right, right.depth + AStarHeuristics.chosen_h(choice, right)))
+            if taq.can_move_right():
+                right = taq.move_right()
+                AStarHeuristics.add_to_opened_nodes(right, right.depth + AStarHeuristics.chosen_h(choice, right))
 
-        if taq[0].can_move_up():
-            up = taq[0].move_up()
-            opened_nodes.append((up, up.depth + AStarHeuristics.chosen_h(choice, up)))
+            if taq.can_move_up():
+                up = taq.move_up()
+                AStarHeuristics.add_to_opened_nodes(up, up.depth + AStarHeuristics.chosen_h(choice, up))
 
-        if taq[0].can_move_left():
-            left = taq[0].move_left()
-            opened_nodes.append((left, left.depth + AStarHeuristics.chosen_h(choice, left)))
+            if taq.can_move_left():
+                left = taq.move_left()
+                AStarHeuristics.add_to_opened_nodes(left, left.depth + AStarHeuristics.chosen_h(choice, left))
 
-        closed_nodes.add(taq[0])
+            closed_nodes.add(taq)
 
-    if len(opened_nodes) != 0:
-        taq = min(opened_nodes, key=lambda x: x[1])
-        opened_nodes.remove(taq)
-    else:
-        print("no result")
-        break
+        taq = AStarHeuristics.get_from_opened_nodes()
+        if taq is None:
+            print("no result")
+            break
 
-print("visited nodes = ", len(closed_nodes))
-print(taq[0])
+    print("visited nodes = ", len(closed_nodes))
+    if taq is not None:
+        print("cost = ", taq.depth)
+        print(taq)

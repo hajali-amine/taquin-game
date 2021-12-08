@@ -27,11 +27,10 @@ def limited_dfs(taquin, limit):
             taq = opened_nodes.pop()
         else:
             print("no result")
-            return False, len(closed_nodes)
+            return False, len(closed_nodes), taq
 
     print(taq)
-    print("limit = ", limit)
-    return True, len(closed_nodes)
+    return True, len(closed_nodes), taq
 
 
 if __name__ == '__main__':
@@ -40,13 +39,18 @@ if __name__ == '__main__':
     limit = 0
     visited_nodes = 0
     last_visited_nodes = 0
-    dfs_result = limited_dfs(taq, limit)
+    dfs_result = None
 
-    while not dfs_result[0] and last_visited_nodes != dfs_result[1]:
+    while True:
         print("------------------------------------- {} -------------------------------------".format(limit))
+        dfs_result = limited_dfs(taq, limit)
         visited_nodes = visited_nodes + dfs_result[1]
         limit = limit + 1
+        if dfs_result[0] or last_visited_nodes == dfs_result[1]:
+            break
         last_visited_nodes = dfs_result[1]
-        dfs_result = limited_dfs(taq, limit)
 
     print("visited nodes = ", visited_nodes)
+    print("cost = ", dfs_result[2].depth)
+    print("limit = ", limit)
+    print(dfs_result[2])

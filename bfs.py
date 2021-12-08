@@ -31,4 +31,5 @@ if __name__ == '__main__':
             break
 
     print("visited nodes = ", len(closed_nodes))
+    print("cost = ", taq.depth)
     print(taq)
