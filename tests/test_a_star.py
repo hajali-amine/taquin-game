@@ -30,5 +30,5 @@ class AStarTests(unittest.TestCase):
 
     def test_h2(self):
         self.assertEqual(18, AStarHeuristics.h2(self.taq1))
-        self.assertEqual(0, AStarHeuristics.h2(self.taq2))
+        self.assertEqual(1, AStarHeuristics.h2(self.taq2))
         self.assertEqual(20, AStarHeuristics.h2(self.taq3))
